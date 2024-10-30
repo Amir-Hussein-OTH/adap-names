@@ -1,57 +1,64 @@
-import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
-import { Name } from "./Name";
+import {Name, DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "./Name";
 
 export class StringArrayName implements Name {
 
-    protected delimiter: string = DEFAULT_DELIMITER;
     protected components: string[] = [];
+    protected delimiter: string = DEFAULT_DELIMITER;
 
-    constructor(source: string[], delimiter?: string) {
-        throw new Error("needs implementation or deletion");
+    constructor(other: string[], delimiter?: string) {
+        if (typeof delimiter !== 'undefined') {
+            this.delimiter = delimiter;
+        }
+        for (let i = 0; i < other.length; i++) {
+            this.components.push(other[i]);
+        }
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
+        let nameString: string = ""
+        for (let i = 0; i < this.components.length; i++) {
+            nameString += this.components[i]
+            if (i < this.components.length - 1)
+                nameString += this.delimiter
+        }
+        return nameString
     }
 
     public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+        return this.asString(this.delimiter);
     }
 
     public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
+        return this.components.length === 0;
+    }
+
+    public getDelimiterCharacter(): string {
+        return this.delimiter;
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.components.length;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        return this.components[i];
     }
 
     public setComponent(i: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+        if (c !== ESCAPE_CHARACTER) {
+            this.components[i] = c;
+        }
     }
 
     public insert(i: number, c: string): void {
-        throw new Error("needs implementation or deletion");
+        this.components.splice(i, 0, c);
     }
 
     public append(c: string): void {
-        throw new Error("needs implementation or deletion");
+        this.components.push(c);
     }
 
     public remove(i: number): void {
-        throw new Error("needs implementation or deletion");
+        this.components.splice(i, 1);
     }
-
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
-
 }
