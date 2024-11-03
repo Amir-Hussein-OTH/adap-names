@@ -1,5 +1,11 @@
 import {Name, DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "./Name";
 
+/**
+ * Represents a string name that can contain multiple components separated by a delimiter.
+ * This class implements the Name interface and provides methods for manipulating
+ * the string name and its components.
+ *
+ */
 export class StringName implements Name {
 
     protected delimiter: string = DEFAULT_DELIMITER;
@@ -7,9 +13,14 @@ export class StringName implements Name {
     protected name: string = "";
     protected length: number = 0;
 
-    // More info:
-    // https://www.studon.fau.de/studon/ilias.php?ref_id=4447999&cmdClass=ilobjforumgui&thr_pk=385940&page=0&cmd=viewThread&cmdNode=13z:tp&baseClass=ilRepositoryGUI
-
+    /**
+     * Constructs a StringName instance.
+     * @param other The initial string name.
+     * @param delimiter Optional custom delimiter for separating components.
+     *
+     * More info:
+     * https://www.studon.fau.de/studon/ilias.php?ref_id=4447999&cmdClass=ilobjforumgui&thr_pk=385940&page=0&cmd=viewThread&cmdNode=13z:tp&baseClass=ilRepositoryGUI
+     */
     constructor(other: string, delimiter?: string) {
 
         if (typeof delimiter !== 'undefined') {
@@ -27,6 +38,11 @@ export class StringName implements Name {
         });
     }
 
+    /**
+     * Returns a human-readable representation of the name, with the specified delimiter.
+     * @param delimiter The delimiter to use for joining components. Defaults to the instance's delimiter.
+     * @returns The human-readable string representation of the name.
+     */
     public asString(delimiter: string = this.delimiter): string {
         let result = "";
         this.name.split('').forEach((char, index) => {
@@ -44,6 +60,10 @@ export class StringName implements Name {
         return result;
     }
 
+    /**
+     * Returns a machine-readable representation of the name using the default delimiter.
+     * @returns The data string representation of the name.
+     */
     public asDataString(): string {
         let result = "";
 
@@ -58,22 +78,27 @@ export class StringName implements Name {
         return result;
     }
 
+    /** @methodtype assertion-method */
     public isEmpty(): boolean {
         return this.name.length >= 1;
     }
 
+    /** @methodtype get-method */
     public getDelimiterCharacter(): string {
         return this.delimiter
     }
 
+    /** @methodtype get-method */
     public getNoComponents(): number {
         return this.length
     }
 
+    /** @methodtype get-method */
     public getComponent(x: number): string {
         return this.name.split(this.delimiter)[x];
     }
 
+    /** @methodtype set-method */
     public setComponent(n: number, c: string): void {
         let split_name: string[];
         split_name = this.name.split(this.delimiter);
@@ -81,6 +106,7 @@ export class StringName implements Name {
         this.name = split_name.join(this.delimiter)
     }
 
+    /** @methodtype command-method */
     public insert(n: number, c: string): void {
         let split_name: string[] = this.name.split(this.delimiter)
         split_name.splice(n, 0, c)
@@ -88,11 +114,13 @@ export class StringName implements Name {
         this.length++;
     }
 
+    /** @methodtype command-method */
     public append(c: string): void {
         this.name += (this.name ? this.delimiter : '') + c;
         this.length++;
     }
 
+    /** @methodtype command-method */
     public remove(n: number): void {
         let split_name: string[] = this.name.split(this.delimiter)
         split_name.splice(n, 1)
@@ -100,9 +128,14 @@ export class StringName implements Name {
         this.length--;
     }
 
-    // More info:
-    // https://www.studon.fau.de/studon/ilias.php?ref_id=4447999&cmdClass=ilobjforumgui&pos_pk=1130228&thr_pk=385173&page=0&viewmode=2&cmd=markPostRead&cmdNode=13z:tp&baseClass=ilRepositoryGUI#1130228
 
+    /**
+     * Concatenates another Name instance to this one if they share the same delimiter.
+     * @param other The other Name instance to concatenate.
+     *
+     * More info:
+     * https://www.studon.fau.de/studon/ilias.php?ref_id=4447999&cmdClass=ilobjforumgui&pos_pk=1130228&thr_pk=385173&page=0&viewmode=2&cmd=markPostRead&cmdNode=13z:tp&baseClass=ilRepositoryGUI#1130228
+     */
     public concat(other: Name): void {
 
         if (this.delimiter !== other.getDelimiterCharacter()) return;
@@ -111,6 +144,5 @@ export class StringName implements Name {
             this.append(other.getComponent(index));
         });
     }
-
 
 }
