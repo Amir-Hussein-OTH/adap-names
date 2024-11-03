@@ -7,33 +7,59 @@ export class StringName implements Name {
     protected name: string = "";
     protected length: number = 0;
 
+    // More info:
+    // https://www.studon.fau.de/studon/ilias.php?ref_id=4447999&cmdClass=ilobjforumgui&thr_pk=385940&page=0&cmd=viewThread&cmdNode=13z:tp&baseClass=ilRepositoryGUI
+
     constructor(other: string, delimiter?: string) {
+
         if (typeof delimiter !== 'undefined') {
             this.delimiter = delimiter;
         }
+
         this.name = other;
-        if (this.name === '') {
-            this.length = 0;
-            return;
-        }
-        const escapedDelimiter = this.delimiter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-        const regex = new RegExp(`(?<!\\\\)${escapedDelimiter}`);
-        this.length = this.name.split(regex).length;
+        this.length = 1;
+
+        const characters = this.name.split('');
+        characters.forEach((char, index) => {
+            if (char === this.delimiter && (index === 0 || this.name.charAt(index - 1) !== ESCAPE_CHARACTER)) {
+                this.length++;
+            }
+        });
     }
 
     public asString(delimiter: string = this.delimiter): string {
-        return this.name
+        let result = "";
+        this.name.split('').forEach((char, index) => {
+            if (char === ESCAPE_CHARACTER) {
+                if (index + 1 < this.name.length) {
+                    result += this.name[index + 1];
+                }
+            } else if (char === this.delimiter) {
+                result += (this.delimiter === delimiter ? this.delimiter : delimiter);
+            } else {
+                result += char;
+            }
+        });
+
+        return result;
     }
 
     public asDataString(): string {
-        return this.name.replace(this.delimiter, "")
+        let result = "";
+
+        this.name.split('').forEach((char, index) => {
+            if (char === this.delimiter && (index === 0 || this.name[index - 1] !== ESCAPE_CHARACTER)) {
+                result += DEFAULT_DELIMITER;
+            } else {
+                result += char;
+            }
+        });
+
+        return result;
     }
 
     public isEmpty(): boolean {
-        if (this.name.length < 1)
-            return false
-        else
-            return true
+        return this.name.length >= 1;
     }
 
     public getDelimiterCharacter(): string {
@@ -63,7 +89,7 @@ export class StringName implements Name {
     }
 
     public append(c: string): void {
-        this.name = this.name + this.delimiter + c
+        this.name += (this.name ? this.delimiter : '') + c;
         this.length++;
     }
 
@@ -74,9 +100,17 @@ export class StringName implements Name {
         this.length--;
     }
 
+    // More info:
+    // https://www.studon.fau.de/studon/ilias.php?ref_id=4447999&cmdClass=ilobjforumgui&pos_pk=1130228&thr_pk=385173&page=0&viewmode=2&cmd=markPostRead&cmdNode=13z:tp&baseClass=ilRepositoryGUI#1130228
+
     public concat(other: Name): void {
-        this.name = this.name + this.delimiter + other.asString()
-        this.length = this.length + other.getNoComponents();
+
+        if (this.delimiter !== other.getDelimiterCharacter()) return;
+        const indices = Array.from({length: other.getNoComponents()}, (_, index) => index);
+        indices.forEach(index => {
+            this.append(other.getComponent(index));
+        });
     }
+
 
 }

@@ -61,4 +61,12 @@ export class StringArrayName implements Name {
     public remove(i: number): void {
         this.components.splice(i, 1);
     }
+
+    public concat(other: Name): void {
+        if (this.delimiter !== other.getDelimiterCharacter()) return;
+        const indices = Array.from({length: other.getNoComponents()}, (_, index) => index);
+        indices.forEach(index => {
+            this.append(other.getComponent(index));
+        });
+    }
 }
