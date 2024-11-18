@@ -36,7 +36,7 @@ export abstract class AbstractName implements Name {
         return componentsArray.join(this.delimiter);
     }
 
-
+   // Use hashcode function from ADAP B01
     public getHashCode(): number {
         let hashCode: number = 0;
         const s: string = this.toString() + this.getDelimiterCharacter();

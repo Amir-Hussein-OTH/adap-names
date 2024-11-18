@@ -1,7 +1,7 @@
 import {AbstractName} from "./AbstractName";
 import {ESCAPE_CHARACTER, Name} from "./Name";
 
-export class StringName extends AbstractName implements Name {
+export class StringName extends AbstractName {
 
     protected name: string = "";
     protected length: number = 0;

@@ -2,7 +2,7 @@ import {AbstractName} from "./AbstractName";
 import {Name} from "./Name";
 
 
-export class StringArrayName extends AbstractName implements Name {
+export class StringArrayName extends AbstractName {
 
     protected components: string[] = [];
 
