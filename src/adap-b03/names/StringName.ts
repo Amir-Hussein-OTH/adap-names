@@ -1,5 +1,5 @@
 import {AbstractName} from "./AbstractName";
-import {Name} from "./Name";
+import {ESCAPE_CHARACTER, Name} from "./Name";
 
 export class StringName extends AbstractName implements Name {
 
@@ -44,5 +44,8 @@ export class StringName extends AbstractName implements Name {
         array.splice(i, 1);
         this.name = array.join(this.delimiter);
         this.length -= 1;
+    }
+    private splitString(str: string, delimiter: string) {
+        return str.split(new RegExp(`(?<!\\${ESCAPE_CHARACTER})\\${delimiter}`));
     }
 }

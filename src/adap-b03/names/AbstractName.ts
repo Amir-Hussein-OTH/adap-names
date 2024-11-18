@@ -93,15 +93,12 @@ export abstract class AbstractName implements Name {
     }
 
 
-    public escape(str: string, delimiter: string) {
+    protected escape(str: string, delimiter: string) {
         return str.replaceAll(new RegExp(`(?<!\\${ESCAPE_CHARACTER})\\${delimiter}`, "g"), ESCAPE_CHARACTER + delimiter);
     }
 
-    public unescape(str: string, delimiter: string) {
+    protected unescape(str: string, delimiter: string) {
         return str.replaceAll(new RegExp(`\\${ESCAPE_CHARACTER}\\${delimiter}`, "g"), delimiter);
     }
 
-    public splitString(str: string, delimiter: string) {
-        return str.split(new RegExp(`(?<!\\${ESCAPE_CHARACTER})\\${delimiter}`));
-    }
 }
