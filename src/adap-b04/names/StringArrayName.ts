@@ -1,69 +1,42 @@
-import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
-import { Name } from "./Name";
-import { AbstractName } from "./AbstractName";
+import {DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "../common/Printable";
+import {AbstractName} from "./AbstractName";
 
 export class StringArrayName extends AbstractName {
-
     protected components: string[] = [];
 
-    constructor(source: string[], delimiter?: string) {
-        super();
-        throw new Error("needs implementation or deletion");
-    }
-
-    public clone(): Name {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asString(delimiter: string = this.delimiter): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public asDataString(): string {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEqual(other: Name): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getHashCode(): number {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public isEmpty(): boolean {
-        throw new Error("needs implementation or deletion");
-    }
-
-    public getDelimiterCharacter(): string {
-        throw new Error("needs implementation or deletion");
+    constructor(other: string[], delimiter?: string) {
+        super(delimiter);
+        for (const item of other) {
+            this.components.push(this.unescape(item, this.delimiter));
+        }
     }
 
     public getNoComponents(): number {
-        throw new Error("needs implementation or deletion");
+        return this.components.length;
     }
 
     public getComponent(i: number): string {
-        throw new Error("needs implementation or deletion");
+        this.checkIndexBounds(i, this.components.length);
+        return this.escape(this.components[i], this.delimiter);
     }
 
-    public setComponent(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+    public setComponent(i: number, c: string): void {
+        this.checkIndexBounds(i, this.components.length);
+        this.components[i] = this.unescape(c, this.delimiter);
     }
 
-    public insert(i: number, c: string) {
-        throw new Error("needs implementation or deletion");
+    public insert(i: number, c: string): void {
+        this.checkIndexBounds(i, this.components.length);
+        this.components.splice(i, 0, this.unescape(c, this.delimiter));
     }
 
-    public append(c: string) {
-        throw new Error("needs implementation or deletion");
+    public append(c: string): void {
+        this.components.push(this.unescape(c, this.delimiter));
     }
 
-    public remove(i: number) {
-        throw new Error("needs implementation or deletion");
+    public remove(i: number): void {
+        this.checkIndexBounds(i, this.components.length);
+        this.components.splice(i, 1);
     }
 
-    public concat(other: Name): void {
-        throw new Error("needs implementation or deletion");
-    }
 }
