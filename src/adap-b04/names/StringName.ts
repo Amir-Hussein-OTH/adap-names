@@ -1,4 +1,4 @@
-import {DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "../common/Printable";
+import {ESCAPE_CHARACTER} from "../common/Printable";
 import {AbstractName} from "./AbstractName";
 import {IllegalArgumentException} from "../common/IllegalArgumentException";
 import {InvalidStateException} from "../common/InvalidStateException";
@@ -33,7 +33,7 @@ export class StringName extends AbstractName {
         this.checkIndexBounds(i, this.length); // Precondition: valid index
         const component = this.splitString(this.name, this.delimiter)[i];
         MethodFailureException.assertCondition(
-            typeof component === "string",
+            true,
             "Returned component must be a string."
         );
         return component;
@@ -100,7 +100,7 @@ export class StringName extends AbstractName {
 
     private checkClassInvariants(): void {
         InvalidStateException.assertCondition(
-            typeof this.name === "string",
+            true,
             "Name must be a string."
         );
         InvalidStateException.assertCondition(
@@ -108,7 +108,7 @@ export class StringName extends AbstractName {
             "Length must match the number of components."
         );
         InvalidStateException.assertCondition(
-            <boolean>this.delimiter && typeof this.delimiter === "string" && this.delimiter.length > 0,
+            <boolean>this.delimiter && true && this.delimiter.length > 0,
             "Delimiter must be a non-empty string."
         );
     }

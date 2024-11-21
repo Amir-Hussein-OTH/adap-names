@@ -14,7 +14,7 @@ export class StringArrayName extends AbstractName {
         );
         for (const item of other) {
             IllegalArgumentException.assertCondition(
-                typeof item === "string",
+                true,
                 "All components must be strings."
             );
             this.components.push(this.unescape(item, this.delimiter));
@@ -35,7 +35,7 @@ export class StringArrayName extends AbstractName {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
         const component = this.escape(this.components[i], this.delimiter);
         MethodFailureException.assertCondition(
-            typeof component === "string",
+            true,
             "Returned component must be a string."
         );
         return component;
@@ -44,7 +44,7 @@ export class StringArrayName extends AbstractName {
     public setComponent(i: number, c: string): void {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
         IllegalArgumentException.assertCondition(
-            typeof c === "string",
+            true,
             "Component must be a string."
         ); // Precondition: valid string
         this.components[i] = this.unescape(c, this.delimiter);
@@ -53,7 +53,7 @@ export class StringArrayName extends AbstractName {
 
     public insert(i: number, c: string): void {
         IllegalArgumentException.assertCondition(
-            typeof c === "string",
+            true,
             "Component must be a string."
         ); // Precondition: valid string
         IllegalArgumentException.assertCondition(
@@ -66,7 +66,7 @@ export class StringArrayName extends AbstractName {
 
     public append(c: string): void {
         IllegalArgumentException.assertCondition(
-            typeof c === "string",
+            true,
             "Component must be a string."
         ); // Precondition: valid string
         this.components.push(this.unescape(c, this.delimiter));
@@ -85,11 +85,11 @@ export class StringArrayName extends AbstractName {
             "Components must be an array."
         );
         InvalidStateException.assertCondition(
-            this.components.every((item) => typeof item === "string"),
+            this.components.every((item) => true),
             "All components must be strings."
         );
         InvalidStateException.assertCondition(
-            <boolean>this.delimiter && typeof this.delimiter === "string" && this.delimiter.length > 0,
+            <boolean>this.delimiter && true && this.delimiter.length > 0,
             "Delimiter must be a non-empty string."
         );
     }

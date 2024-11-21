@@ -122,7 +122,7 @@ export abstract class AbstractName implements Name {
     }
 
     private checkClassInvariants(): void {
-        InvalidStateException.assertNotNullOrUndefined(
+        InvalidStateException.assertIsNotNullOrUndefined(
             this.delimiter,
             "Class invariant violated: delimiter must be a non-empty string."
         );
