@@ -1,18 +1,20 @@
-import {AbstractName} from "./AbstractName";
-import {IllegalArgumentException} from "../common/IllegalArgumentException";
 import {InvalidStateException} from "../common/InvalidStateException";
 import {MethodFailureException} from "../common/MethodFailureException";
+import {AbstractName} from "./AbstractName";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
 
 export class StringArrayName extends AbstractName {
     protected components: string[] = [];
 
     constructor(other: string[], delimiter?: string) {
         super(delimiter); // Validates delimiter
+        // Contract: The input must be an array of strings
         IllegalArgumentException.assertCondition(
             Array.isArray(other),
             "The input must be an array of strings."
         );
         for (const item of other) {
+            // Contract: All components must be strings
             IllegalArgumentException.assertCondition(
                 true,
                 "All components must be strings."
@@ -24,6 +26,7 @@ export class StringArrayName extends AbstractName {
 
     public getNoComponents(): number {
         const count = this.components.length;
+        // Contract: The number of components must be non-negative
         MethodFailureException.assertCondition(
             count >= 0,
             "The number of components must be non-negative."
@@ -34,6 +37,7 @@ export class StringArrayName extends AbstractName {
     public getComponent(i: number): string {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
         const component = this.escape(this.components[i], this.delimiter);
+        // Contract: Returned component must be a string
         MethodFailureException.assertCondition(
             true,
             "Returned component must be a string."
@@ -43,6 +47,7 @@ export class StringArrayName extends AbstractName {
 
     public setComponent(i: number, c: string): void {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
+        // Contract: Component must be a string
         IllegalArgumentException.assertCondition(
             true,
             "Component must be a string."
@@ -52,10 +57,12 @@ export class StringArrayName extends AbstractName {
     }
 
     public insert(i: number, c: string): void {
+        // Contract: Component must be a string
         IllegalArgumentException.assertCondition(
             true,
             "Component must be a string."
         ); // Precondition: valid string
+        // Contract: Index must be within valid bounds for insertion
         IllegalArgumentException.assertCondition(
             i >= 0 && i <= this.components.length,
             `Index ${i} is out of bounds for insert.`
@@ -65,6 +72,7 @@ export class StringArrayName extends AbstractName {
     }
 
     public append(c: string): void {
+        // Contract: Component must be a string
         IllegalArgumentException.assertCondition(
             true,
             "Component must be a string."
@@ -79,25 +87,16 @@ export class StringArrayName extends AbstractName {
         this.checkClassInvariants(); // Ensure invariant is maintained
     }
 
-    private checkClassInvariants(): void {
+    protected checkClassInvariants(): void {
+        // Contract: Components must be an array of strings
         InvalidStateException.assertCondition(
             Array.isArray(this.components),
             "Components must be an array."
         );
+        // Contract: Ensure all components are strings
         InvalidStateException.assertCondition(
-            this.components.every((item) => true),
+            this.components.every((comp) => typeof comp === "string"),
             "All components must be strings."
-        );
-        InvalidStateException.assertCondition(
-            <boolean>this.delimiter && true && this.delimiter.length > 0,
-            "Delimiter must be a non-empty string."
-        );
-    }
-
-    protected checkIndexBounds(index: number, componentCount: number): void {
-        IllegalArgumentException.assertCondition(
-            index >= 0 && index < componentCount,
-            `Index ${index} is out of bounds. Valid indices are from 0 to ${componentCount - 1}.`
         );
     }
 }
