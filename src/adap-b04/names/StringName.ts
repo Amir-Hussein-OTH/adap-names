@@ -8,7 +8,7 @@ export class StringName extends AbstractName {
         super(delimiter); // Validates delimiter
         // Contract: Name must be a non-empty string
         IllegalArgumentException.assertCondition(
-            !(!name || name.length <= 0),
+            typeof name === "string" && name.length > 0,
             "Name must be a non-empty string."
         );
         this.name = this.unescape(name, this.delimiter);

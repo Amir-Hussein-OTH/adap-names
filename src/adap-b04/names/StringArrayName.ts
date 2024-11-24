@@ -1,7 +1,9 @@
-import {InvalidStateException} from "../common/InvalidStateException";
+import {DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "../common/Printable";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
 import {MethodFailureException} from "../common/MethodFailureException";
 import {AbstractName} from "./AbstractName";
-import {IllegalArgumentException} from "../common/IllegalArgumentException";
+import {InvalidStateException} from "../common/InvalidStateException";
+
 
 export class StringArrayName extends AbstractName {
     protected components: string[] = [];
@@ -16,7 +18,7 @@ export class StringArrayName extends AbstractName {
         for (const item of other) {
             // Contract: All components must be strings
             IllegalArgumentException.assertCondition(
-                true,
+                typeof item === "string",
                 "All components must be strings."
             );
             this.components.push(this.unescape(item, this.delimiter));
@@ -25,33 +27,21 @@ export class StringArrayName extends AbstractName {
     }
 
     public getNoComponents(): number {
-        const count = this.components.length;
-        // Contract: The number of components must be non-negative
-        MethodFailureException.assertCondition(
-            count >= 0,
-            "The number of components must be non-negative."
-        );
-        return count;
+        return this.components.length;
     }
 
     public getComponent(i: number): string {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
-        const component = this.escape(this.components[i], this.delimiter);
-        // Contract: Returned component must be a string
-        MethodFailureException.assertCondition(
-            true,
-            "Returned component must be a string."
-        );
-        return component;
+        return this.escape(this.components[i], this.delimiter);
     }
 
     public setComponent(i: number, c: string): void {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
         // Contract: Component must be a string
         IllegalArgumentException.assertCondition(
-            true,
+            typeof c === "string",
             "Component must be a string."
-        ); // Precondition: valid string
+        );
         this.components[i] = this.unescape(c, this.delimiter);
         this.checkClassInvariants(); // Ensure invariant is maintained
     }
@@ -59,13 +49,13 @@ export class StringArrayName extends AbstractName {
     public insert(i: number, c: string): void {
         // Contract: Component must be a string
         IllegalArgumentException.assertCondition(
-            true,
+            typeof c === "string",
             "Component must be a string."
         ); // Precondition: valid string
         // Contract: Index must be within valid bounds for insertion
         IllegalArgumentException.assertCondition(
             i >= 0 && i <= this.components.length,
-            `Index ${i} is out of bounds for insert.`
+            "Index ${i} is out of bounds for insert."
         ); // Precondition: valid index
         this.components.splice(i, 0, this.unescape(c, this.delimiter));
         this.checkClassInvariants(); // Ensure invariant is maintained
@@ -74,7 +64,7 @@ export class StringArrayName extends AbstractName {
     public append(c: string): void {
         // Contract: Component must be a string
         IllegalArgumentException.assertCondition(
-            true,
+            typeof c === "string",
             "Component must be a string."
         ); // Precondition: valid string
         this.components.push(this.unescape(c, this.delimiter));
@@ -87,7 +77,7 @@ export class StringArrayName extends AbstractName {
         this.checkClassInvariants(); // Ensure invariant is maintained
     }
 
-    protected checkClassInvariants(): void {
+    public checkClassInvariants(): void {
         // Contract: Components must be an array of strings
         InvalidStateException.assertCondition(
             Array.isArray(this.components),
