@@ -1,5 +1,6 @@
 import {AbstractName} from "./AbstractName";
-import {ESCAPE_CHARACTER, Name} from "./Name";
+import { ESCAPE_CHARACTER } from "../common/Printable";
+
 
 export class StringName extends AbstractName {
 

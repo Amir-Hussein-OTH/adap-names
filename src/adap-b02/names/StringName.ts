@@ -1,4 +1,6 @@
-import {Name, DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "./Name";
+import { DEFAULT_DELIMITER, ESCAPE_CHARACTER } from "../common/Printable";
+import {Name} from "./Name";
+
 
 /**
  * Represents a string name that can contain multiple components separated by a delimiter.

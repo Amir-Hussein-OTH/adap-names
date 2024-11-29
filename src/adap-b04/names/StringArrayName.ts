@@ -1,6 +1,4 @@
-import {DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "../common/Printable";
 import {IllegalArgumentException} from "../common/IllegalArgumentException";
-import {MethodFailureException} from "../common/MethodFailureException";
 import {AbstractName} from "./AbstractName";
 import {InvalidStateException} from "../common/InvalidStateException";
 

@@ -2,7 +2,7 @@ import {DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "../common/Printable";
 import {Name} from "./Name";
 import {IllegalArgumentException} from "../common/IllegalArgumentException";
 import {InvalidStateException} from "../common/InvalidStateException";
-import {MethodFailureException} from "../common/MethodFailureException";
+import { MethodFailedException } from "../common/MethodFailedException";
 
 export abstract class AbstractName implements Name {
     // Contract: The delimiter should always be a non-empty string
@@ -36,7 +36,7 @@ export abstract class AbstractName implements Name {
 
         const result = unescapedComponents.join(delimiter);
         // Contract: The result string must include the delimiter
-        MethodFailureException.assertCondition(
+        MethodFailedException.assertCondition(
             result.includes(delimiter),
             "The result string must include the provided delimiter."
         );
@@ -58,7 +58,7 @@ export abstract class AbstractName implements Name {
     public isEmpty(): boolean {
         const result = this.getNoComponents() === 0;
         // Contract: isEmpty must return true if there are no components
-        MethodFailureException.assertCondition(
+        MethodFailedException.assertCondition(
             result === (this.getNoComponents() === 0),
             "isEmpty must return true if there are no components."
         );
@@ -79,7 +79,7 @@ export abstract class AbstractName implements Name {
     public clone(): Name {
         const copy = Object.assign(Object.create(Object.getPrototypeOf(this)), this);
         // Contract: The clone must be equal to the original object
-        MethodFailureException.assertCondition(
+        MethodFailedException.assertCondition(
             copy.isEqual(this),
             "The clone must be equal to the original object."
         );
@@ -103,7 +103,7 @@ export abstract class AbstractName implements Name {
         }
 
         // Contract: Concatenation must increase component count by the number of components in the other object
-        MethodFailureException.assertCondition(
+        MethodFailedException.assertCondition(
             this.getNoComponents() === initialComponentCount + other.getNoComponents(),
             "Concatenation must increase component count by the number of components in the other object."
         );
