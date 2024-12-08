@@ -1,5 +1,4 @@
 import { Equality } from "../common/Equality";
-import { Cloneable } from "../common/Cloneable";
 
 export interface Coordinate extends Equality {
 

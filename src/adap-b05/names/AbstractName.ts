@@ -1,7 +1,6 @@
 import {DEFAULT_DELIMITER, ESCAPE_CHARACTER} from "../common/Printable";
 import {Name} from "./Name";
 import {IllegalArgumentException} from "../common/IllegalArgumentException";
-import {AssertionDispatcher, ExceptionType} from "../common/AssertionDispatcher";
 import {MethodFailedException} from "../common/MethodFailedException";
 import {InvalidStateException} from "../common/InvalidStateException";
 
@@ -11,12 +10,12 @@ export abstract class AbstractName implements Name {
 
     constructor(delimiter: string = DEFAULT_DELIMITER) {
         // precondition
-        IllegalArgumentException.assertCondition(delimiter != null && delimiter.length == 1, "The delimiter must consist of only one character.");
+        IllegalArgumentException.assert(delimiter != null && delimiter.length == 1, "The delimiter must consist of only one character.");
 
         this.delimiter = delimiter ?? this.delimiter;
 
         // postcondition
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION,
+        InvalidStateException.assert(
             this instanceof AbstractName,
             "The instance does not meet the prototype requirements of AbstractName.",
         );
@@ -143,7 +142,7 @@ export abstract class AbstractName implements Name {
     public isEmpty(): boolean {
         const result = this.getNoComponents() === 0;
         // Contract: isEmpty must return true if there are no components
-        MethodFailedException.assertCondition(
+        MethodFailedException.assert(
             result === (this.getNoComponents() === 0),
             "isEmpty must return true if there are no components."
         );
@@ -152,13 +151,13 @@ export abstract class AbstractName implements Name {
 
     public getDelimiterCharacter(): string {
         // CLASS INV
-        InvalidStateException.assertIsNotNullOrUndefined(this.delimiter, "Delimiter must not be null!");
-        InvalidStateException.assertCondition(this.delimiter.length === 1, "Delimiter must be a single character!");
+        InvalidStateException.assert(   this.delimiter != null && this.delimiter != undefined, "Delimiter must not be null!");
+        InvalidStateException.assert(this.delimiter.length === 1, "Delimiter must be a single character!");
 
         let str: string = this.delimiter;
 
         // postcondition
-        MethodFailedException.assertIsNotNullOrUndefined(str, "Could not execute getDelimiterCharacter()!");
+        MethodFailedException.assert(str != null && str != undefined, "Could not execute getDelimiterCharacter()!");
 
         return str;
     }

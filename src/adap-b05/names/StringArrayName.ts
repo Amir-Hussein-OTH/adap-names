@@ -1,6 +1,6 @@
 import { AbstractName } from "./AbstractName";
-import { AssertionDispatcher, ExceptionType } from "../common/AssertionDispatcher";
 import { IllegalArgumentException } from "../common/IllegalArgumentException";
+import {MethodFailedException} from "../common/MethodFailedException";
 
 export class StringArrayName extends AbstractName {
     protected components: string[] = [];
@@ -12,39 +12,39 @@ export class StringArrayName extends AbstractName {
         this.validatePreconditions(other, delimiter);
         this.components = other.map(c => this.unescape(c, this.delimiter));
         // Postcondition: Ensure valid string array
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, Array.isArray(this.components) && this.components.every(() => true), "Components should be a valid string array.");
+        MethodFailedException.assert( Array.isArray(this.components) && this.components.every(() => true), "Components should be a valid string array.");
     }
 
     private validatePreconditions(other: string[], delimiter?: string): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, other !== undefined && other !== null, "Should be defined");
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, other.length !== 0, "At least one component is required.");
+        MethodFailedException.assert(  other !== undefined && other !== null, "Should be defined");
+        MethodFailedException.assert( other.length !== 0, "At least one component is required.");
 
         if (delimiter && delimiter.length !== 1) {
             throw new IllegalArgumentException("Delimiter must be a single character.");
         }
 
         other.forEach(c => {
-            AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this.isEscaped(c, this.getDelimiterCharacter()), "Components must be escaped.");
+            MethodFailedException.assert( this.isEscaped(c, this.getDelimiterCharacter()), "Components must be escaped.");
         });
     }
 
     private ensureValidInstance(): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this instanceof StringArrayName, "Instance is not of type StringArrayName.");
+        MethodFailedException.assert(this instanceof StringArrayName, "Instance is not of type StringArrayName.");
     }
 
     private ensureValidIndex(i: number): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, i >= 0 && i < this.getNoComponents(), "Index out of bounds.");
+        MethodFailedException.assert( i >= 0 && i < this.getNoComponents(), "Index out of bounds.");
     }
 
     private ensureValidComponent(c: string): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, c !== undefined && c !== null, "Should be defined");
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this.isEscaped(c, this.getDelimiterCharacter()), "Component must be escaped.");
+        MethodFailedException.assert( c !== undefined && c !== null, "Should be defined");
+        MethodFailedException.assert( this.isEscaped(c, this.getDelimiterCharacter()), "Component must be escaped.");
     }
 
     public getNoComponents(): number {
         this.ensureValidInstance();
         const count = this.components.length;
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, count >= 0, "Must return non-negative value.");
+        MethodFailedException.assert( count >= 0, "Must return non-negative value.");
         return count;
     }
 
@@ -53,8 +53,8 @@ export class StringArrayName extends AbstractName {
         this.ensureValidIndex(i);
         const component = this.escape(this.components[i], this.delimiter);
         // Postcondition: Ensure component is defined and escaped
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, component !== undefined && component !== null, "Component should be defined");
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, this.isEscaped(component, this.getDelimiterCharacter()), "Component must be escaped.");
+        MethodFailedException.assert( component !== undefined && component !== null, "Component should be defined");
+        MethodFailedException.assert( this.isEscaped(component, this.getDelimiterCharacter()), "Component must be escaped.");
 
         return component;
     }
@@ -74,7 +74,7 @@ export class StringArrayName extends AbstractName {
     public insert(i: number, c: string): void {
         this.ensureValidInstance();
         this.ensureValidComponent(c);
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, i >= 0 && i <= this.getNoComponents(), "Index out of bounds.");
+        MethodFailedException.assert( i >= 0 && i <= this.getNoComponents(), "Index out of bounds.");
 
         try {
             this.components.splice(i, 0, this.unescape(c, this.delimiter));

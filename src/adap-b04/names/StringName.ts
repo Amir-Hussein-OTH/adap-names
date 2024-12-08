@@ -7,7 +7,7 @@ export class StringName extends AbstractName {
     constructor(name: string, delimiter?: string) {
         super(delimiter); // Validates delimiter
         // Contract: Name must be a non-empty string
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             typeof name === "string" && name.length > 0,
             "Name must be a non-empty string."
         );

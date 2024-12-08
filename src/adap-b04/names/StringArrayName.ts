@@ -9,13 +9,13 @@ export class StringArrayName extends AbstractName {
     constructor(other: string[], delimiter?: string) {
         super(delimiter); // Validates delimiter
         // Contract: The input must be an array of strings
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             Array.isArray(other),
             "The input must be an array of strings."
         );
         for (const item of other) {
             // Contract: All components must be strings
-            IllegalArgumentException.assertCondition(
+            IllegalArgumentException.assert(
                 typeof item === "string",
                 "All components must be strings."
             );
@@ -36,7 +36,7 @@ export class StringArrayName extends AbstractName {
     public setComponent(i: number, c: string): void {
         this.checkIndexBounds(i, this.components.length); // Precondition: valid index
         // Contract: Component must be a string
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             typeof c === "string",
             "Component must be a string."
         );
@@ -46,12 +46,12 @@ export class StringArrayName extends AbstractName {
 
     public insert(i: number, c: string): void {
         // Contract: Component must be a string
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             typeof c === "string",
             "Component must be a string."
         ); // Precondition: valid string
         // Contract: Index must be within valid bounds for insertion
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             i >= 0 && i <= this.components.length,
             "Index ${i} is out of bounds for insert."
         ); // Precondition: valid index
@@ -61,7 +61,7 @@ export class StringArrayName extends AbstractName {
 
     public append(c: string): void {
         // Contract: Component must be a string
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             typeof c === "string",
             "Component must be a string."
         ); // Precondition: valid string
@@ -77,12 +77,12 @@ export class StringArrayName extends AbstractName {
 
     public checkClassInvariants(): void {
         // Contract: Components must be an array of strings
-        InvalidStateException.assertCondition(
+        InvalidStateException.assert(
             Array.isArray(this.components),
             "Components must be an array."
         );
         // Contract: Ensure all components are strings
-        InvalidStateException.assertCondition(
+        InvalidStateException.assert(
             this.components.every((comp) => typeof comp === "string"),
             "All components must be strings."
         );
