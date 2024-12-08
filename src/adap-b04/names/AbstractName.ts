@@ -15,7 +15,7 @@ export abstract class AbstractName implements Name {
 
     private setDelimiter(delimiter: string): void {
         // Contract: Delimiter must be non-empty string
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             !(!delimiter || delimiter.length <= 0),
             "Delimiter must be a non-empty string."
         );
@@ -24,7 +24,7 @@ export abstract class AbstractName implements Name {
 
     // Contract: Must return a non-empty string
     public asString(delimiter: string = this.delimiter): string {
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             !(!delimiter || delimiter.length <= 0),
             "Delimiter must be a non-empty string."
         );
@@ -36,7 +36,7 @@ export abstract class AbstractName implements Name {
 
         const result = unescapedComponents.join(delimiter);
         // Contract: The result string must include the delimiter
-        MethodFailedException.assertCondition(
+        MethodFailedException.assert(
             result.includes(delimiter),
             "The result string must include the provided delimiter."
         );
@@ -58,7 +58,7 @@ export abstract class AbstractName implements Name {
     public isEmpty(): boolean {
         const result = this.getNoComponents() === 0;
         // Contract: isEmpty must return true if there are no components
-        MethodFailedException.assertCondition(
+        MethodFailedException.assert(
             result === (this.getNoComponents() === 0),
             "isEmpty must return true if there are no components."
         );
@@ -79,7 +79,7 @@ export abstract class AbstractName implements Name {
     public clone(): Name {
         const copy = Object.assign(Object.create(Object.getPrototypeOf(this)), this);
         // Contract: The clone must be equal to the original object
-        MethodFailedException.assertCondition(
+        MethodFailedException.assert(
             copy.isEqual(this),
             "The clone must be equal to the original object."
         );
@@ -103,7 +103,7 @@ export abstract class AbstractName implements Name {
         }
 
         // Contract: Concatenation must increase component count by the number of components in the other object
-        MethodFailedException.assertCondition(
+        MethodFailedException.assert(
             this.getNoComponents() === initialComponentCount + other.getNoComponents(),
             "Concatenation must increase component count by the number of components in the other object."
         );
@@ -119,7 +119,7 @@ export abstract class AbstractName implements Name {
 
     protected checkIndexBounds(index: number, componentCount: number): void {
         // Contract: Index must be within valid bounds
-        IllegalArgumentException.assertCondition(
+        IllegalArgumentException.assert(
             index >= 0 && index < componentCount,
             `Index ${index} is out of bounds. Valid indices are from 0 to ${componentCount - 1}.`
         );
@@ -130,11 +130,11 @@ export abstract class AbstractName implements Name {
     }
 
     checkClassInvariants(): void {
-        InvalidStateException.assertIsNotNullOrUndefined(
-            this.delimiter,
+        InvalidStateException.assert(
+            this.delimiter != null && this.delimiter != undefined,
             "Class invariant violated: delimiter must be a non-empty string."
         );
-        InvalidStateException.assertCondition(
+        InvalidStateException.assert(
             this.delimiter.length > 0,
             "Class invariant violated: delimiter must have a length greater than zero."
         );

@@ -1,6 +1,7 @@
-import {AssertionDispatcher, ExceptionType} from "../common/AssertionDispatcher";
 import {AbstractName} from "./AbstractName";
 import {ESCAPE_CHARACTER} from "../common/Printable";
+import {MethodFailedException} from "../common/MethodFailedException";
+import {IllegalArgumentException} from "../common/IllegalArgumentException";
 
 export class StringName extends AbstractName {
 
@@ -10,39 +11,39 @@ export class StringName extends AbstractName {
     constructor(other: string, delimiter?: string) {
         super(delimiter);
         // precondition
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, other !== undefined && other !== null, "Should be defined");
+        IllegalArgumentException.assert( other !== undefined && other !== null, "Should be defined");
         this.name = other;
         this.noComponents = this.splitString(this.name, this.delimiter).length;
         // postcondition
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, this.noComponents > 0, "noComponents should have positive value.");
+        MethodFailedException.assert( this.noComponents > 0, "noComponents should have positive value.");
 
     }
 
     public getNoComponents(): number {
         // precondition: Ensure this instance is of type StringName
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this instanceof StringName, "Instance is not of type StringName.");
+        IllegalArgumentException.assert( this instanceof StringName, "Instance is not of type StringName.");
 
         const res = this.noComponents;
 
         // postcondition
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, res >= 0, "Must return non-negative value.");
+        MethodFailedException.assert(res >= 0, "Must return non-negative value.");
         return res;
     }
 
     public getComponent(i: number): string {
         // precondition: Ensure this instance is of type StringName
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this instanceof StringName, "Instance is not of type StringName.");
+        IllegalArgumentException.assert( this instanceof StringName, "Instance is not of type StringName.");
 
         // precondition: Ensure valid index
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, i >= 0 && i < this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
+        IllegalArgumentException.assert( i >= 0 && i < this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
 
         const res = this.splitString(this.name, this.delimiter)[i];
 
         // postcondition: Ensure component is defined
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, res !== undefined && res !== null, "Component should be defined");
+        MethodFailedException.assert( res !== undefined && res !== null, "Component should be defined");
 
         // postcondition: Ensure component is escaped
-        AssertionDispatcher.dispatch(ExceptionType.POSTCONDITION, this.isEscaped(res, this.getDelimiterCharacter()), `Component (${res}) must be escaped.`);
+        MethodFailedException.assert( this.isEscaped(res, this.getDelimiterCharacter()), `Component (${res}) must be escaped.`);
 
         return res;
     }
@@ -67,12 +68,12 @@ export class StringName extends AbstractName {
 
     public insert(i: number, c: string): void {
         // precondition: Ensure this instance is of type StringName
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this instanceof StringName, "Instance is not of type StringName.");
+        IllegalArgumentException.assert( this instanceof StringName, "Instance is not of type StringName.");
 
         // preconditions: Validate the input component and index
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, i >= 0 && i <= this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, c !== undefined && c !== null, "Component should be defined");
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this.isEscaped(c, this.getDelimiterCharacter()), `Component (${c}) must be escaped.`);
+        IllegalArgumentException.assert( i >= 0 && i <= this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
+        IllegalArgumentException.assert( c !== undefined && c !== null, "Component should be defined");
+        IllegalArgumentException.assert( this.isEscaped(c, this.getDelimiterCharacter()), `Component (${c}) must be escaped.`);
 
         // backup original components before modification
         const componentsBefore = this.splitString(this.name, this.delimiter);
@@ -109,10 +110,10 @@ export class StringName extends AbstractName {
 
     public remove(i: number): void {
         // precondition: Ensure this instance is of type StringName
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this instanceof StringName, "Instance is not of type StringName.");
+        IllegalArgumentException.assert( this instanceof StringName, "Instance is not of type StringName.");
 
         // precondition: Ensure valid index
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, i >= 0 && i < this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
+        IllegalArgumentException.assert( i >= 0 && i < this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
 
         // backup original components before modification
         const componentsBefore = this.splitString(this.name, this.delimiter);
@@ -131,16 +132,16 @@ export class StringName extends AbstractName {
     }
 
     private ensureValidInstance(): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this instanceof StringName, "Instance is not of type StringName.");
+        IllegalArgumentException.assert( this instanceof StringName, "Instance is not of type StringName.");
     }
 
     private ensureValidIndex(i: number): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, i >= 0 && i < this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
+        IllegalArgumentException.assert( i >= 0 && i < this.getNoComponents(), `Index ${i} out of bounds (0-${this.getNoComponents()})`);
     }
 
     private ensureValidComponent(c: string): void {
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, c !== undefined && c !== null, "Component should be defined");
-        AssertionDispatcher.dispatch(ExceptionType.PRECONDITION, this.isEscaped(c, this.getDelimiterCharacter()), `Component (${c}) must be escaped.`);
+        IllegalArgumentException.assert( c !== undefined && c !== null, "Component should be defined");
+        IllegalArgumentException.assert( this.isEscaped(c, this.getDelimiterCharacter()), `Component (${c}) must be escaped.`);
     }
 
     private splitString(str: string, delim: string) {
